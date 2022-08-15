@@ -40,8 +40,10 @@ app.get('/', (req, res) => {
 });
 
 app.get('/makecampground', async (req, res) => {
-    const campground = new Campground({ title: 'Gray Bay Beach', description: 'Lovely bay waters.', location: 'USA', price: '12'});
+    const campground = new Campground({ title: 'Minecraft', description: 'Blocks of blocks', location: 'USA', price: '60'});
     await campground.save();
+    console.log(campground);
+    res.redirect(`/campgrounds/${campground._id}`);
 });
 
 app.get('/campgrounds', async (req, res) => {
@@ -54,12 +56,16 @@ app.get('/campgrounds/new', (req, res) => {
 });
 
 app.post('/campgrounds', async (req, res) => {
-    const newCampground = await new Campground(req.body);
-    res.redirect(`/campgrounds/${newCampground._id}`);
+    console.log('/campgrounds', req.body);
+    const campground = new Campground(req.body);
+    await campground.save();
+    console.log('created camp', campground);
+    res.redirect(`/campgrounds/${campground._id}`);
 });
 
 app.get('/campgrounds/:id', async (req, res) => {
     const campground = await Campground.findById(req.params.id);
+    console.log('/campgrounds/:id', campground);
     res.render('./campgrounds/show.ejs', { campground });
 });
 
